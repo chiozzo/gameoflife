@@ -13,84 +13,49 @@ namespace GameOfLife
         }
     }
 
-    class World
+    public class World
     {
         // This is my world. The world may exist beyond your view, but you need to trust that it still exists.
         // Things don't exist just because you believe in them! - Banjo
-        List<CellNode> currentUniverse = new List<CellNode>();
-        List<CellNode> futureUniverse = new List<CellNode>();
-
+        List<Cell> currentUniverse = new List<Cell>();
+        List<Cell> futureUniverse = new List<Cell>();
     }
 
-    class CellNode
+    public class Cell
     {
-        // Check all neighbors against rules.
-        // Mark self as alive/dead based on outcome of rules.
-        // For rule 4, neighbors need to be able to alter self and self needs to be able to alter neighbors
-        public int[] position { get; set; }
-        private bool isAlive { get; set; }
-        public CellNode top { get; set; }
-        public CellNode topRight { get; set; }
-        public CellNode right { get; set; }
-        public CellNode bottomRight { get; set; }
-        public CellNode bottom { get; set; }
-        public CellNode bottomLeft { get; set; }
-        public CellNode left { get; set; }
-        public CellNode topLeft { get; set; }
-
-        public CellNode() { isAlive = true; }
-
-        public void calculateLife()
+        public Cell(bool state)
         {
-            int aliveNeighborCounter = 0;
-            // replace with switch
-            if (this.top != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.topRight != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.right != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.bottomRight != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.bottom != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.bottomLeft != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.left != null)
-            {
-                aliveNeighborCounter++;
-            }
-            if (this.topLeft != null)
-            {
-                aliveNeighborCounter++;
-            }
+            this.isAlive = state;
+        }
 
+        public int[] position { get; set; }
+        public bool isAlive { get; set; }
 
-            if (aliveNeighborCounter < 2)
-            { // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-                this.isAlive = false;
-            } else if ()
-            { // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-                // For rule 4, neighbors need to be able to alter self and self needs to be able to alter neighbors
-                this.makeNeighborsAlive();
-            } else if (aliveNeighborCounter > 3)
-            { // Any live cell with more than three live neighbours dies, as if by overcrowding.
-                this.isAlive = false;
-            } else if (aliveNeighborCounter == 2 || aliveNeighborCounter == 3)
-            { // Any live cell with two or three live neighbours lives on to the next generation.
-                this.isAlive = //continue to be alive
+        // In order to check dead cells, I need to pass the coordiantes of the dead cell (derived from the live cell I started with)
+        // and search my (sorted) list to find how many live neighbors that dead cell has.
+        public void setFutureState(int aliveNeighbors)
+        {
+            if (this.isAlive == true)
+            {
+                if (aliveNeighbors > 1 && aliveNeighbors < 4)
+                {
+                    this.isAlive = true;
+                }
+                else
+                {
+                    this.isAlive = false;
+                }
+            }
+            else
+            {
+                if (aliveNeighbors == 3)
+                {
+                    this.isAlive = true;
+                }
+                else
+                {
+                    this.isAlive = false;
+                }
             }
         }
     }
